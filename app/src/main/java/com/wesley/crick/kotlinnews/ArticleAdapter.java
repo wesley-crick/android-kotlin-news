@@ -1,5 +1,6 @@
 package com.wesley.crick.kotlinnews;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
     public void onBindViewHolder(@NonNull ArticleAdapter.MyViewHolder holder, int position) {
         Article a = this.articles[position];
         holder.articleTitle.setText(a.getTitle());
+
+        //Log.e("ArticleAd", "Has Thumbnail: " + a.hasThumbnail() + " thumbnail: " + a.getThumbnail());
 
         if ( a.hasThumbnail() ) {
             Picasso.get().load(a.getThumbnail()).into(holder.articleImage);

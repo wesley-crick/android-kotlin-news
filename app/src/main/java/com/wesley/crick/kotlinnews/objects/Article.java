@@ -16,9 +16,7 @@ public class Article {
         this.html = html;
         this.url = url;
 
-        if ( this.thumbnail == null ) {
-            hasThumbnail = false;
-        } else hasThumbnail = !this.thumbnail.isEmpty();
+        validate();
     }
 
     public Article(JSONObject obj) {
@@ -27,7 +25,20 @@ public class Article {
         this.html = obj.optString("selftext_html", "");
         this.url = obj.optString("url", "");
 
-        //ToDo validate most fields have been filled
+        validate();
+    }
+
+    private void validate() {
+        // Clear out thumbnail when it is not a link to an image
+        if ( !this.thumbnail.substring(0, 4).equals("http")) {
+            this.thumbnail = "";
+        }
+
+        if ( this.thumbnail == null ) {
+            hasThumbnail = false;
+        } else hasThumbnail = !this.thumbnail.isEmpty();
+
+        // Todo validate some fields
     }
 
     public String getTitle() {

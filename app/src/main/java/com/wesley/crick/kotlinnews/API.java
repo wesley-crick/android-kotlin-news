@@ -38,8 +38,10 @@ public class API {
      * @param cb A Callback to place the result in
      */
     public void getArticles(Callback cb) {
+        //https://www.reddit.com/r/kotlin/.json
+        //https://www.reddit.com/r/funny/
         Request request = new Request.Builder()
-                .url("https://www.reddit.com/r/kotlin/.json")
+                .url("https://www.reddit.com/r/funny/.json")
                 .build();
 
         //    return response.body().string();

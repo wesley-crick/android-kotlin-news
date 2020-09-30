@@ -1,12 +1,8 @@
-package com.wesley.crick.kotlinnews;
-
-import java.io.IOError;
-import java.io.IOException;
+package com.wesley.crick.kotlinnews.objects;
 
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Make API calls. This is a Singleton Class. Use API.getInstance() to retrieve the object

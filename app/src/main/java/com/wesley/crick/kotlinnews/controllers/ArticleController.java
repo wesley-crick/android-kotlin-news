@@ -1,6 +1,6 @@
 package com.wesley.crick.kotlinnews.controllers;
 
-import com.wesley.crick.kotlinnews.API;
+import com.wesley.crick.kotlinnews.objects.API;
 import com.wesley.crick.kotlinnews.callbacks.GenericCallBack;
 import com.wesley.crick.kotlinnews.callbacks.SimpleCallback;
 import com.wesley.crick.kotlinnews.objects.Article;
@@ -9,9 +9,6 @@ import com.wesley.crick.kotlinnews.objects.ResponseTemplate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // Highest Error Code: 2005
 

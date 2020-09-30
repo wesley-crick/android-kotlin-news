@@ -5,11 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.wesley.crick.kotlinnews.callbacks.GenericCallBack;
+import com.wesley.crick.kotlinnews.controllers.ArticleAdapter;
 import com.wesley.crick.kotlinnews.controllers.ArticleController;
 import com.wesley.crick.kotlinnews.objects.Article;
 import com.wesley.crick.kotlinnews.objects.ResponseTemplate;
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setAdapter(new ArticleAdapter(articles));
+        recyclerView.setAdapter(new ArticleAdapter(articles, this));
 
         this.mainProgressBar.setVisibility(View.GONE);
     }

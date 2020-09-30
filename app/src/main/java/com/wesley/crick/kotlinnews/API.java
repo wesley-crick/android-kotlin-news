@@ -33,15 +33,28 @@ public class API {
     }
 
     /**
-     * Make an async call to get articles
+     * Make an async call to get r/Funny
      *
      * @param cb A Callback to place the result in
      */
-    public void getArticles(Callback cb) {
-        //https://www.reddit.com/r/kotlin/.json
-        //https://www.reddit.com/r/funny/
+    public void getRFunny(Callback cb) {
         Request request = new Request.Builder()
                 .url("https://www.reddit.com/r/funny/.json")
+                .build();
+
+        //    return response.body().string();
+        client.newCall(request).enqueue(cb);
+    }
+
+
+    /**
+     * Make an async call to get r/Funny
+     *
+     * @param cb A Callback to place the result in
+     */
+    public void getRKotlin(Callback cb) {
+        Request request = new Request.Builder()
+                .url("https://www.reddit.com/r/kotlin/.json")
                 .build();
 
         //    return response.body().string();

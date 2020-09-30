@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
 
-public class Article {
+import java.io.Serializable;
+
+public class Article implements Serializable {
     private String title;
     private String thumbnail;
     private String html;    //The html used to describe the post ["selftext_html"]
@@ -35,7 +37,7 @@ public class Article {
             default:
                 this.articleType = ArticleType.link;
         }
-        if ( this.html != "" ) {
+        if ( !this.html.isEmpty() ) {
             this.articleType = ArticleType.text;
         }
 
@@ -44,8 +46,10 @@ public class Article {
 
     private void validate() {
         // Clear out thumbnail when it is not a link to an image
-        if ( !this.thumbnail.substring(0, 4).equals("http")) {
-            this.thumbnail = "";
+        if ( !this.thumbnail.isEmpty() ) {
+            if (!this.thumbnail.substring(0, 4).equals("http")) {
+                this.thumbnail = "";
+            }
         }
 
         hasThumbnail = !this.thumbnail.isEmpty();

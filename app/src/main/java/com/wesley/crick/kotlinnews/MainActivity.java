@@ -25,13 +25,26 @@ public class MainActivity extends AppCompatActivity {
 
         // Link vars to ui
         this.mainProgressBar = findViewById(R.id.mainProgressBar);
+        findViewById(R.id.mainRFunny).setOnClickListener( (v) -> {
+            getArticles(SubReddit.funny);
+        } );
+        findViewById(R.id.mainRKotlin).setOnClickListener( (v) -> {
+            getArticles(SubReddit.kotlin);
+        } );
 
-        this.mainProgressBar.setVisibility(View.VISIBLE);
-        getArticles();
+        getArticles(SubReddit.kotlin);
     }
 
-    private void getArticles() {
-        ArticleController.getInstance().getArticles(this::articlesReturned);
+    private void getArticles(SubReddit r) {
+        this.mainProgressBar.setVisibility(View.VISIBLE);
+
+        switch (r) {
+            case funny:
+                ArticleController.getInstance().getFunnyArticles(this::articlesReturned);
+                break;
+            default:
+                ArticleController.getInstance().getKotlinArticles(this::articlesReturned);
+        }
     }
 
     private void articlesReturned(ResponseTemplate<Article[]> rt) {
@@ -55,5 +68,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(new ArticleAdapter(articles));
 
         this.mainProgressBar.setVisibility(View.GONE);
+    }
+
+    public enum SubReddit {
+        funny, kotlin
     }
 }

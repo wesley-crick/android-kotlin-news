@@ -35,8 +35,12 @@ public class ArticleController {
         return instance;
     }
 
-    public void getArticles(final SimpleCallback<Article[]> cb) {
-        API.getInstance().getArticles( new GenericCallBack( ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb)));
+    public void getFunnyArticles(final SimpleCallback<Article[]> cb) {
+        API.getInstance().getRFunny( new GenericCallBack( ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb)));
+    }
+
+    public void getKotlinArticles(final SimpleCallback<Article[]> cb) {
+        API.getInstance().getRKotlin( new GenericCallBack( ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb)));
     }
 
     private void articlesRetrieved(ResponseTemplate<JSONObject> res, SimpleCallback<Article[]> cb) {

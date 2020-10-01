@@ -1,9 +1,6 @@
 package com.wesley.crick.kotlinnews.objects;
 
-import androidx.annotation.NonNull;
-
 import org.json.JSONObject;
-
 import java.io.Serializable;
 
 public class Article implements Serializable {
@@ -12,6 +9,7 @@ public class Article implements Serializable {
     private String html;    //The html used to describe the post ["selftext_html"]
     private String overrideUrl; //Link to external site or image ["url_overridden_by_dest"]
     private ArticleType articleType;
+    private String postHint;    // The type of post ["post_hint"]
 
     private boolean hasThumbnail;
 
@@ -29,17 +27,8 @@ public class Article implements Serializable {
         this.html = obj.optString("selftext_html", "");
         this.overrideUrl = obj.optString("url_overridden_by_dest", "");
 
-        String postType = obj.optString("post_hint", "");
-        switch(postType) {
-            case "image":
-                this.articleType = ArticleType.image;
-                break;
-            default:
-                this.articleType = ArticleType.link;
-        }
-        if ( !this.html.isEmpty() ) {
-            this.articleType = ArticleType.text;
-        }
+        this.postHint = obj.optString("post_hint", "");
+
 
         validate();
     }
@@ -54,33 +43,70 @@ public class Article implements Serializable {
 
         hasThumbnail = !this.thumbnail.isEmpty();
 
-        // Todo validate some fields
+        if ( this.html.equals("null") ) this.html = "";
+
+        if (this.postHint.equals("image")) {
+            this.articleType = ArticleType.image;
+        } else {
+            this.articleType = ArticleType.link;
+        }
+        if ( !this.html.isEmpty() ) {
+            this.articleType = ArticleType.text;
+        }
+
+        // This url can be a relative path to a subreddit post
+        if ( !this.overrideUrl.isEmpty() ) {
+            if (this.overrideUrl.substring(0, 3).equals("/r/")) {
+                this.overrideUrl = "https://www.reddit.com" + this.overrideUrl;
+            }
+        }
     }
 
+    /**
+     * The title of the article
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * The image/thumbnail of the article
+     */
     public String getThumbnail() {
         return thumbnail;
     }
 
+    /**
+     * The text of the article in HTML formatting. Can be empty string
+     */
     public String getHtml() {
         return html;
     }
 
+    /**
+     * Does this article have a thumbnail
+     */
     public boolean hasThumbnail() {
         return hasThumbnail;
     }
 
+    /**
+     * What type of article is this. @See ArticleType
+     */
     public ArticleType getArticleType() {
         return articleType;
     }
 
+    /**
+     * The link the article can point too. Can be empty string
+     */
     public String getOverrideUrl() {
         return overrideUrl;
     }
 
+    /**
+     * The possible types of articles
+     */
     public enum ArticleType {
         image, link, text
     }

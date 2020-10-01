@@ -1,10 +1,16 @@
 package com.wesley.crick.kotlinnews;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -34,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         getArticles(SubReddit.kotlin);
     }
 
+    /**
+     * Make an API request to the articles in the subreddit
+     *
+     * @param r The subreddit to pull articles from
+     */
     private void getArticles(SubReddit r) {
         this.mainProgressBar.setVisibility(View.VISIBLE);
 
@@ -46,29 +57,67 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Direct the article response to success or error methods
+     * @param rt The main details for the response
+     */
     private void articlesReturned(ResponseTemplate<Article[]> rt) {
         runOnUiThread( () -> {
+            // If success, build the recycler view
             if ( rt.getCode() == 0 ) {
                 buildArticleRecyclerView(rt.obj);
             } else {
-                // TODO Display Error
+                // Response failed, display error message.
+                dislayAlert(rt.getMessage());
+                this.mainProgressBar.setVisibility(View.GONE);
             }
         });
     }
 
+    /**
+     * Display an alert dialog with the given message.
+     * TODO Flush out this method into a static function, with more options. title, pos/neg callbacks...etc
+     * @param message
+     */
+    private void dislayAlert(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setPositiveButton("OK", (d, v) -> {
+                   d.dismiss();
+                })
+                .create()
+                .show();
+    }
+
+    /**
+     * Build the recycler view and adapter.
+     *
+     * @param articles The articles to display
+     */
     private void buildArticleRecyclerView(Article[] articles) {
         RecyclerView recyclerView = findViewById(R.id.mainRecyclerView);
 
-        // use a linear layout manager
-        // TODO change depending on screen size and orientation
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        // Depending on screen size and rotation, display the Articles in a certain view
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        if (isTablet && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 3));
+        }else if (isTablet && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerView.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 2));
+        }else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 2));
+        }else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+        }
 
         recyclerView.setAdapter(new ArticleAdapter(articles, this));
 
         this.mainProgressBar.setVisibility(View.GONE);
     }
 
+    /**
+     * Supported subreddits
+     */
     public enum SubReddit {
         funny, kotlin
     }

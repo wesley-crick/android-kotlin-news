@@ -13,14 +13,10 @@ public class Article implements Serializable {
 
     private boolean hasThumbnail;
 
-    public Article(String title, String thumbnail, String html) {
-        this.title = title;
-        this.thumbnail = thumbnail;
-        this.html = html;
-
-        validate();
-    }
-
+    /**
+     * Create the object from the JSON Object
+     * @param obj
+     */
     public Article(JSONObject obj) {
         this.title = obj.optString("title", "");
         this.thumbnail = obj.optString("thumbnail", "");
@@ -33,6 +29,9 @@ public class Article implements Serializable {
         validate();
     }
 
+    /**
+     * Validate/convert any fields after building the object
+     */
     private void validate() {
         // Clear out thumbnail when it is not a link to an image
         if ( !this.thumbnail.isEmpty() ) {

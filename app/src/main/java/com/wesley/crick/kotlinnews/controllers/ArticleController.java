@@ -32,14 +32,31 @@ public class ArticleController {
         return instance;
     }
 
+    /**
+     * Get articles from r/Funny
+     * @param cb A callback for the results of the request
+     */
     public void getFunnyArticles(final SimpleCallback<Article[]> cb) {
-        API.getInstance().getRFunny( new GenericCallBack( ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb)));
+        API.getInstance().getRFunny( new GenericCallBack(
+                ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb))
+        );
     }
 
+    /**
+     * Get articles from r/Kotlin
+     * @param cb A callback for the results of the request
+     */
     public void getKotlinArticles(final SimpleCallback<Article[]> cb) {
-        API.getInstance().getRKotlin( new GenericCallBack( ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb)));
+        API.getInstance().getRKotlin( new GenericCallBack(
+                ( ResponseTemplate<JSONObject> rt) -> this.articlesRetrieved(rt, cb))
+        );
     }
 
+    /**
+     * Manages the success of failure of getting the articles
+     * @param res The response
+     * @param cb The callback to call when complete (success or fail)
+     */
     private void articlesRetrieved(ResponseTemplate<JSONObject> res, SimpleCallback<Article[]> cb) {
 
         // Response failed
@@ -54,7 +71,7 @@ public class ArticleController {
 
         // Response was a success!
         JSONArray arr = new JSONArray();
-        try {
+        try {   // Get obj.data{}.children[]
             arr = res.obj.getJSONObject("data").getJSONArray("children");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -70,25 +87,14 @@ public class ArticleController {
         Article[] articles = new Article[arr.length()];
         for( int i = 0; i < arr.length(); i++) {
             JSONObject obj = null;
-            try {
-                obj = arr.getJSONObject(i);
+            try {   // Get a single object out of the array.        obj.data.children[i].data
+                obj = arr.getJSONObject(i).getJSONObject("data");
             } catch (JSONException e) {
                 e.printStackTrace();
                 cb.call(new ResponseTemplate<>(2004, "Failed to parse response. Please try again later."));
                 return;
             }
-
-            if ( obj != null ) {
-                try {
-                    obj = obj.getJSONObject("data");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    cb.call(new ResponseTemplate<>(2005, "Failed to parse response. Please try again later."));
-                    return;
-                }
-                articles[i] = new Article(obj);
-            }
-
+            articles[i] = new Article(obj);
         }
 
         ResponseTemplate<Article[]> rt = new ResponseTemplate<>(0, "Articles");

@@ -37,14 +37,12 @@ public class API {
         Request request = new Request.Builder()
                 .url("https://www.reddit.com/r/funny/.json")
                 .build();
-
-        //    return response.body().string();
         client.newCall(request).enqueue(cb);
     }
 
 
     /**
-     * Make an async call to get r/Funny
+     * Make an async call to get r/Kotlin
      *
      * @param cb A Callback to place the result in
      */
@@ -52,8 +50,6 @@ public class API {
         Request request = new Request.Builder()
                 .url("https://www.reddit.com/r/kotlin/.json")
                 .build();
-
-        //    return response.body().string();
         client.newCall(request).enqueue(cb);
     }
 

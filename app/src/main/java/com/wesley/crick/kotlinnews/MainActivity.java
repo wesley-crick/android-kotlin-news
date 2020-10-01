@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
      * @param rt The main details for the response
      */
     private void articlesReturned(ResponseTemplate<Article[]> rt) {
+        // When this is called, it is run on a separate thread.
+        // So we have to bring the data back to the main thread to interact with the UI.
         runOnUiThread( () -> {
             // If success, build the recycler view
             if ( rt.getCode() == 0 ) {

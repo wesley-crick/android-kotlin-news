@@ -17,6 +17,9 @@ import com.wesley.crick.kotlinnews.ArticleActivity;
 import com.wesley.crick.kotlinnews.R;
 import com.wesley.crick.kotlinnews.objects.Article;
 
+/**
+ * Use to display the articles in a recycler view.
+ */
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHolder> {
 
     /// Stores a list of the articles to display
@@ -28,6 +31,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
         this.activity = activity;
     }
 
+    /**
+     * Structure for the singular item that is reused in the recycler view
+     */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView articleTitle;
@@ -44,6 +50,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
     @NonNull
     @Override
     public ArticleAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout used for the items
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.article_item, parent, false);
         return new MyViewHolder(v);
@@ -54,12 +61,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
         final Article a = this.articles[position];
         holder.articleTitle.setText(a.getTitle());
 
-        //Log.e("ArticleAd", "Has Thumbnail: " + a.hasThumbnail() + " thumbnail: " + a.getThumbnail());
-
+        // If the post has a thumbnail, GET the image and put it in the ImageView
         if ( a.hasThumbnail() ) {
             Picasso.get().load(a.getThumbnail()).into(holder.articleImage);
             holder.articleImage.setVisibility(View.VISIBLE);
         } else {
+            // Hide the ImageView
             holder.articleImage.setVisibility(View.GONE);
         }
 

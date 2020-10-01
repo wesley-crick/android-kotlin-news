@@ -17,10 +17,17 @@ import okhttp3.Response;
 
 // Highest Error Code: 1002
 
+/**
+ * This is a generic OkHttp callback. It is a helper class to map to the SimpleCallback
+ */
 public class GenericCallBack implements Callback {
 
     private SimpleCallback<JSONObject> cb;
 
+    /**
+     *
+     * @param cb The SimpleCallback
+     */
     public GenericCallBack(SimpleCallback<JSONObject> cb){
         this.cb = cb;
     }
@@ -28,7 +35,8 @@ public class GenericCallBack implements Callback {
     @Override
     public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
-        Log.e("GenericCB", e.getMessage());
+        if ( e.getMessage() != null)
+            Log.e("GenericCB", e.getMessage());
 
         ResponseTemplate<JSONObject> rt = new ResponseTemplate<JSONObject>(1000,
                 "Failed to contact server. Please check your internet and try again.");
@@ -37,7 +45,7 @@ public class GenericCallBack implements Callback {
 
     @Override
     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-        ResponseTemplate<JSONObject> rt = new ResponseTemplate<JSONObject>(-1, "");
+        ResponseTemplate<JSONObject> rt = new ResponseTemplate<>(-1, "");
         // Validate the response was a success (200)
         if ( response.isSuccessful() ) {
             // Get the json out of the response
@@ -50,16 +58,16 @@ public class GenericCallBack implements Callback {
                 obj = new JSONObject(s);
             } catch (JSONException e) {
                 e.printStackTrace();
-                rt = new ResponseTemplate<JSONObject>(1002,
+                rt = new ResponseTemplate<>(1002,
                         "Failed to parse response. Please try again later.");
             }
             // If the JSON object exists then we have the data!
             if ( obj != null ) {
-                rt = new ResponseTemplate<JSONObject>(0, "Success");
+                rt = new ResponseTemplate<>(0, "Success");
                 rt.obj = obj;
             }
         } else {    // Failed request (404, 500..etc)
-            rt = new ResponseTemplate<JSONObject>(1001, "Server Error! Please try again later.");
+            rt = new ResponseTemplate<>(1001, "Server Error! Please try again later.");
         }
         cb.call(rt);
     }

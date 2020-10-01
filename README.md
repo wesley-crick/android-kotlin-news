@@ -5,6 +5,11 @@ A simple Android app that will ingest from the Kotlin subreddit to create a list
  - 1000 is from GenericCallback
  - 2000 is from ArticleController
 
+## Dependencies
+ - [Android X](https://developer.android.com/jetpack/androidx) - Typical libraries used for android development.
+ - [Ok Http](https://square.github.io/okhttp/) - For making HTTP requests.
+ - [Picasso](https://square.github.io/picasso/) - For loading images over the network and managing image memory in app.
+
 ## Screenshots
 <table style="width:100%">
 	<tr>

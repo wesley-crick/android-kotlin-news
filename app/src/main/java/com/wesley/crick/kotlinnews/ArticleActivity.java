@@ -4,6 +4,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -59,12 +61,22 @@ public class ArticleActivity extends AppCompatActivity {
             articleWebview.setVisibility(View.GONE);
             articleLink.setVisibility(View.VISIBLE);
             articleLink.setText(a.getOverrideUrl());
-        } else {
+            articleLink.setOnClickListener((v)-> this.onArticleLinkClicked(a.getOverrideUrl()));
+        } else if (a.getArticleType() == Article.ArticleType.text) {
             articleLink.setVisibility(View.GONE);
             articleWebview.setVisibility(View.VISIBLE);
 
             Spanned html = HtmlCompat.fromHtml(a.getHtml(), HtmlCompat.FROM_HTML_MODE_LEGACY);
             articleWebview.loadData(html.toString(), "text/html; charset=utf-8", "utf-8");
+        } else {
+            articleWebview.setVisibility(View.GONE);
+            articleLink.setVisibility(View.GONE);
         }
+    }
+
+    private void onArticleLinkClicked(String url) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 }
